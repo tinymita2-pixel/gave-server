@@ -356,8 +356,8 @@ public final class Shop implements Listener {
         if (truck != null && game.trip.traveling()) return false;
         // 원정: 등불이 다 가려지면 트럭 상점이 잠긴다(Truck.lampCover, 2026-11-12 sp_engine LAMP)
         if (truck != null && truck.lampLocked()) return false;
-        // 원정 라운드 종류 '잠긴 트럭'(trip_rounds: ask shopLocked) 동안은 상점이 없다
-        if (truck != null && Boolean.TRUE.equals(game.trip.ask("shopLocked"))) return false;
+        // 원정 라운드 종류 '잠긴 트럭'(trip_rounds: ask shopLocked) 동안, 그리고 판 시작 인트로(원정을 꺼도 돎) 동안은 상점이 없다
+        if (Boolean.TRUE.equals(game.trip.ask("shopLocked"))) return false;
         return switch (game.state) {
             case WAVE -> inShop(p);
             case PREP, BREAK -> flat(p.getLocation()) <= Plaza.R_SAFE + 0.5;
@@ -1066,6 +1066,8 @@ public final class Shop implements Listener {
             v.actions.put(at[i], () -> {
                 if (!truck.takePendingPart()) return;
                 truck.addPart(d.key());
+                // 모두에게 '트럭에 부품을 달았다'(증강 쪽 Augments.addPart 와 같은 알림. 상점 길에서는 빠져 있었다)
+                if (Hud.hasPhrase("aug_part")) game.hud.notice("aug_part", 60);
                 partPicker = null;
                 partOffer = null;
                 Props.soundAround(Truck.center().toLocation(game.world).add(0, 1, 0), null, Sound.BLOCK_ANVIL_USE, 0.7f, 1f, 0.9f, 32, -1);

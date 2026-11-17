@@ -6,8 +6,12 @@ load: STARTUP
 description: 게이브 - 사방에서 몰려오는 게이브를 총으로 막고 상점에서 강해지며 최대한 멀리 가는 협동 웨이브
 commands:
   gave:
-    description: 판 진행(오피). 시작, 중지, 상태, 팩, 자동, 원정, 웨이브, 데미지, 공격력, 소환, 시험
+    description: 판 진행(오피). 시작, 중지, 상태, 팩, 자동, 원정, 웨이브, 다시하기, 데미지, 공격력, 최대인원, 소환, 시험
     aliases: [게이브]
+    permission: gave.op
+  maxplayer:
+    description: 서버 최대 인원(오피). /maxplayer [수] (= /gave 최대인원)
+    aliases: [최대인원, maxplayers]
     permission: gave.op
   도감:
     description: 게이브 도감(한 번 만난 종만 열람). /도감 [공통|1막|2막|3막|4막|보스|종 이름]

@@ -873,6 +873,16 @@ public final class BossDirector implements Director.BossHook {
     }
 
     @Override
+    public void retry() {
+        clear("다시 하기");
+        endingBreak = false;
+        endAt = -1;
+        skyStart = -1;
+        unfreezeLooks();
+        game.mobs.frozen = false;
+    }
+
+    @Override
     public void reset() {
         if (boss != null && !boss.dead) boss.cleanRemove();
         clear("판 바뀜");

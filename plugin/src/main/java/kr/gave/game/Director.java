@@ -198,7 +198,9 @@ public final class Director {
         // 2026-11-12 파워커브: 1.4 → 0.95(수가 1.45배라 1인 벌이는 비슷), REWARD_CROWD 0.53(체력 지수 0.75 에서도 한 사람 벌이가 인원과 무관하게: 0.6 + 0.75 x 0.53 = 1)
         // 2026-11-14 돈 구조(build/audit/돈.md 안 B): 0.95 → 2.3. 설정 moneyMul 1.7 과 30명 판의 도움 배율(약 1.4)을 여기에 녹였다(설정 배율은 1 이 기본).
         // 나누기는 kr.gave.player.Wallet(팀 몫 70% 는 모두 똑같이, 30% 는 때린 만큼, 함께 잡으면 +10%)
-        public static double REWARD_MUL = 2.3, REWARD_PER_WAVE = 0.0, REWARD_CROWD = 0.53;
+        // 2026-11-16 사용자 "라운드 넘어갈수록 증강이나 업그레이드 뽑기 비싸지는거에 비해 돈 수입률 증가가 못따라가": 처치 돈도 웨이브마다
+        // 오르게. 다만 상점 값(웨이브마다 +5%, Shop.Ware 의 growth 0.05)은 못 따라가는 3%(난이도로 남김, 같은 날 사용자 "완화만", "3%만"). 1웨이브는 그대로
+        public static double REWARD_MUL = 2.3, REWARD_PER_WAVE = 0.03, REWARD_CROWD = 0.53;
 
         // 인원 비례: 총량은 접속자^UNITS_POW, 체력은 x 접속자^HP_POW(동시 수 상한에 걸린 몫도 체력으로). 사람 수와 무관하게 비슷하게(근거 tools/balance_sim.py)
         // 2026-11-11 0.45, 0.58 → 0.4, 0.45. 2026-11-12 → 0.6, 0.35: 30명 판이 웨이브마다 160 마리에 막혀 체력만 불었음(수는 많게, 한 마리는 덜 단단하게)
@@ -958,6 +960,20 @@ public final class Director {
         log("판 끝 연출: 남은 " + n + "마리 중앙 원으로");
     }
 
+    /** 다시 하기(Game.retry): 판 끝 연출을 거두고 보스 고리를 되돌린다. 모여든 게이브는 Game 이 치우고, 판 단위 기록(덱, 나온 종, 변이)과 묶음은 그대로. */
+    public void retry() {
+        ending = false;
+        endLured.clear();
+        waveRunning = false;
+        if (boss != null) {
+            try {
+                boss.retry();
+            } catch (RuntimeException e) {
+                game.plugin.getLogger().log(java.util.logging.Level.WARNING, "[감독] 보스 고리 retry 예외", e);
+            }
+        }
+    }
+
     /** 판 끝에서 기록을 보여 주기까지 틱(모여드는 시간). */
     public int endTicks() {
         return Tune.END_TICKS;
@@ -1431,6 +1447,10 @@ public final class Director {
 
         /** 전멸(판 끝 연출 시작). */
         default void gameOver() {
+        }
+
+        /** 다시 하기(Game.retry, 판 끝 연출 중): 보스와 그 땅, 하늘을 거둠. 판 단위 기록(엔딩을 봤나)은 그대로. */
+        default void retry() {
         }
 
         /** 판 시작, 판 끝. */

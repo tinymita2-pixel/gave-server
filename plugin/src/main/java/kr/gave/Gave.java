@@ -154,6 +154,14 @@ public final class Gave extends JavaPlugin implements Listener {
         // /gave 명령 안(소환, 시험 훅이 바로 놓는 것)에서는 설정 bannedSpecies 로 막은 종도 놓인다(SpeciesBan)
         SpeciesBan.open++;
         try {
+            // /maxplayer <수>(= /gave 최대인원 <수>): 운영 편의로 따로 둔 짧은 명령(2026-11-16 사용자)
+            if (cmd.getName().equalsIgnoreCase("maxplayer")) {
+                String[] b = new String[a.length + 1];
+                b[0] = "최대인원";
+                System.arraycopy(a, 0, b, 1, a.length);
+                s.sendMessage(maxPlayersCmd(b));
+                return true;
+            }
             return command(s, a);
         } catch (NumberFormatException e) {
             // 숫자 인자를 바로 읽는 곳(웨이브, 소환, 시험 훅 수십 곳)에 숫자가 아닌 글이 오면 '내부 오류' 대신 한 줄로
@@ -166,7 +174,7 @@ public final class Gave extends JavaPlugin implements Listener {
 
     /** /gave 웨이브 로 건너뛸 수 있는 가장 큰 웨이브. */
     private static final int WAVE_MAX = 999;
-    private static final List<String> SUBS = List.of("시작", "중지", "상태", "팩", "자동", "원정", "웨이브", "데미지", "공격력", "소환", "시험");
+    private static final List<String> SUBS = List.of("시작", "중지", "상태", "팩", "자동", "원정", "웨이브", "다시하기", "데미지", "공격력", "최대인원", "소환", "시험");
 
     /**
      * /gave 탭 완성: 첫 칸은 하위 명령, 자동과 원정은 on off, 팩은 강제, 소환은 구현된 종. 사람 이름이 오는 칸(시험의 셋째, 소환의 다섯째)만 바닐라 이름 목록(null),
@@ -192,7 +200,7 @@ public final class Gave extends JavaPlugin implements Listener {
             return true;
         }
         if (a.length == 0) {
-            s.sendMessage("/gave 시작 | 중지 | 상태 | 팩 [강제] | 자동 [on|off] | 원정 [on|off] | 웨이브 <n> | 데미지 [배율] | 공격력 [배율] | 소환 <종> [수] [거리] [이름] | 시험 <행동> <이름> ...");
+            s.sendMessage("/gave 시작 | 중지 | 상태 | 팩 [강제] | 자동 [on|off] | 원정 [on|off] | 웨이브 <n> | 다시하기 | 데미지 [배율] | 공격력 [배율] | 최대인원 [수] | 소환 <종> [수] [거리] [이름] | 시험 <행동> <이름> ...");
             return true;
         }
         switch (a[0]) {
@@ -254,8 +262,10 @@ public final class Gave extends JavaPlugin implements Listener {
                 game.beginWave(n);
                 s.sendMessage(game.status());
             }
+            case "다시하기", "retry" -> s.sendMessage(game.retry(s.getName()));
             case "데미지", "damage" -> s.sendMessage(damageCmd(a));
             case "공격력", "power" -> s.sendMessage(powerCmd(a));
+            case "최대인원", "maxplayer", "maxplayers" -> s.sendMessage(maxPlayersCmd(a));
             case "소환", "spawn" -> s.sendMessage(spawnCmd(s, a));
             case "시험", "test" -> {
                 if (a.length < 3) {
@@ -318,6 +328,35 @@ public final class Gave extends JavaPlugin implements Listener {
         getConfig().set("damageMul", v);
         saveConfig();
         return "게이브 피해 배율 x" + mul(now) + " 에서 x" + mul(v) + " 로";
+    }
+
+    /** /gave 최대인원 [수]: 서버 최대 인원을 바로 바꾸고 server.properties 의 max-players 줄도 고쳐 다시 켜도 남게(2026-11-15 사용자) */
+    private String maxPlayersCmd(String[] a) {
+        int now = getServer().getMaxPlayers();
+        if (a.length < 2) return "최대 인원 " + now + "명 (/gave 최대인원 <1~1000>)";
+        int n;
+        try {
+            n = Integer.parseInt(a[1].trim().replace("명", ""));
+        } catch (NumberFormatException e) {
+            return "숫자로 적는다: /gave 최대인원 <1~1000>";
+        }
+        if (n < 1 || n > 1000) return "1~1000 사이만 된다: " + a[1];
+        getServer().setMaxPlayers(n);
+        return "최대 인원 " + now + " → " + n + "명" + saveMaxPlayers(n);
+    }
+
+    /** server.properties 의 max-players 줄만 바꿔 쓴다(다른 줄, 줄 끝 그대로. ISO-8859-1 로 읽고 써서 바이트를 안 건드림) */
+    private static String saveMaxPlayers(int n) {
+        java.nio.file.Path f = java.nio.file.Path.of("server.properties");
+        try {
+            String s = java.nio.file.Files.readString(f, java.nio.charset.StandardCharsets.ISO_8859_1);
+            String t = s.matches("(?s).*(^|\\n)max-players=.*") ? s.replaceFirst("(?m)^max-players=[^\\r\\n]*", "max-players=" + n)
+                : s + (s.isEmpty() || s.endsWith("\n") ? "" : System.lineSeparator()) + "max-players=" + n + System.lineSeparator();
+            java.nio.file.Files.writeString(f, t, java.nio.charset.StandardCharsets.ISO_8859_1);
+            return " (server.properties 에도 저장)";
+        } catch (java.io.IOException | RuntimeException e) {
+            return " (server.properties 저장 실패: " + e.getMessage() + ". 다시 켜면 예전 값)";
+        }
     }
 
     /**

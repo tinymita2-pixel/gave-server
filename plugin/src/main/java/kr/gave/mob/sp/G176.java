@@ -257,10 +257,18 @@ public final class G176 extends Gabe {
         }
     }
 
-    /** 지나온 5 블록마다 고랑 토막 하나(싸움터 안에서만). */
+    /**
+     * 지나온 5 블록마다 고랑 토막 하나(싸움터 안에서만). 길 앞쪽으로 간 거리로 센다. 길에서 밀려나면(넉백, 폭발, 막힌 칸에서 미끄러짐) 거기서 새로 센다:
+     * 2026-11-16 실서버 멈춤(감시 장치가 60초 뒤 서버를 끔)은 laidFrom 과의 직선 거리로 세던 고리가, 쟁기가 길 옆이나 뒤로 5 블록 넘게 밀리자 끝나지 않은 것
+     */
     private void lay() {
-        Vector here = pos.clone().setY(0);
-        while (here.distance(laidFrom) >= SEG) {
+        Vector moved = pos.clone().setY(0).subtract(laidFrom);
+        double along = moved.dot(dir);
+        if (along < 0 || along > SEG * 4 || moved.subtract(dir.clone().multiply(along)).lengthSquared() > HALF * HALF) {
+            laidFrom.copy(pos).setY(0);
+            return;
+        }
+        for (; along >= SEG; along -= SEG) {
             Vector mid = laidFrom.clone().add(dir.clone().multiply(HALF));
             laidFrom.add(dir.clone().multiply(SEG));
             Vector c = center();

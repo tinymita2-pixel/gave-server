@@ -136,6 +136,8 @@ public final class Truck implements TripPart {
     private final Map<String, Integer> parts = new LinkedHashMap<>();
     private int pendingParts;
     private double hornMark = 1;
+    /** 이번 라운드를 열 때의 체력 비율(다시 하기가 터진 트럭을 이 체력으로 되살림). */
+    private double startFrac = 1;
     private final TruckWard ward = new TruckWard();
 
     public Truck(Game game, Trip trip) {
@@ -379,6 +381,7 @@ public final class Truck implements TripPart {
         if (!alive() || !running() || amount <= 0 || Double.isNaN(amount)) return 0;
         double k = trip.mul("truckDmg") * Math.pow(0.85, Math.min(3, part("p_plate")));
         if (part("p_cooler") > 0 && frac() < 0.25) k *= 0.7;
+        if (part("p_bumper") > 0) k *= 0.9; // 범퍼(2026-11-16 손질): 들이받힘 말고도 늘 10% 덜 깎인다
         // 증강(먹이: 서 있는 사람마다 x1.1)
         k *= game.augments.truckDamageMul(frac());
         amount *= k;
@@ -763,9 +766,9 @@ public final class Truck implements TripPart {
         return key.equals("p_plate") ? 3 : key.equals("p_crane") ? 2 : 1;
     }
 
-    /** 효과를 낼 쪽이 아직 없는 부품(범퍼: 추격전이 증강의 ramMul 을 부르기 전까지)은 안 뜬다. */
+    /** 효과를 낼 쪽이 아직 없는 부품은 안 뜬다. 지금은 없다(범퍼도 2026-11-16 부터 늘 트럭 피해 -10%, 증강 표의 needs 도 뺌) */
     private boolean partReady(String key) {
-        return !key.equals("p_bumper") || game.augments.ready("ramMul");
+        return true; // 범퍼도 이제 늘 효과가 있다(트럭 피해 -10%)
     }
 
     /** 고를 부품 n 개(한도가 안 찬 것, 효과가 달린 것 가운데 무작위). */
@@ -949,6 +952,7 @@ public final class Truck implements TripPart {
         hp = maxHp;
         hurtFrom = 1;
         hornMark = 1;
+        startFrac = 1;
         dyingAt = -1;
         boomed = false;
         deathCause = null;
@@ -964,6 +968,32 @@ public final class Truck implements TripPart {
     @Override
     public void beginRound(int n) {
         dealtThisRound = 0;
+        startFrac = frac();
+    }
+
+    /** 다시 하기: 무는 표시를 지우고, 터진 트럭은 그 라운드를 열 때의 체력으로 되살린다(부품, 수리 횟수는 그대로). 안 터졌으면 그 체력보다 낮을 때만 채운다. */
+    @Override
+    public void retry() {
+        marks.clear();
+        lampCovers.clear();
+        lampOffs.clear();
+        seekers = biters = 0;
+        double back = Math.max(1, maxHp * startFrac);
+        if (dyingAt < 0) {
+            hp = Math.max(hp, back);
+            return;
+        }
+        dyingAt = -1;
+        boomed = false;
+        deathCause = null;
+        hp = back;
+        hurtFrom = hornMark = frac();
+        if (built) {
+            restoreLights();
+            light(true);
+            spawnDisplays(false);
+        }
+        trip.log("트럭 되살림(다시 하기) 체력 " + (int) hp + "/" + (int) maxHp);
     }
 
     @Override

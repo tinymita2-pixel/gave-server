@@ -87,8 +87,8 @@ trip:
   afterLaunch: false
   credits: true
   bossFreeRevive: false
-  # intro: 판 시작 인트로(kr.gave.trip.Story, 장면표는 jar 의 trip/intro.json). first = 서버를 켠 뒤 첫 판만 긴 판(검은 화면 약 28초), 그다음 판부터 짧은 판(약 9초).
-  #   full = 매 판 긴 판, short = 매 판 짧은 판, off = 인트로 없이 예전 오프닝(헌사 한 줄 뒤 이야기 한 줄)
-  intro: first
+  # intro: 판 시작 인트로(kr.gave.trip.Story, 장면표는 jar 의 trip/intro.json). full = 매 판 긴 판(목소리, 검은 화면 약 28초, 2026-11-16 기본),
+  #   first = 서버를 켠 뒤 첫 판만 긴 판, 그다음 판부터 짧은 판(약 9초), short = 매 판 짧은 판, off = 인트로 없이 예전 오프닝(헌사 한 줄 뒤 이야기 한 줄)
+  intro: full
   noSpecials: [chase, sandstorm]  # 2026-11-13 사용자 '모래폭풍 1뎀씩 주는 그거는 삭제해'
   tune: {}

@@ -43,7 +43,8 @@ import kr.gave.world.Plaza;
  * 0 으로 두어 끄고, 준비 시간은 Game.stateAt 을 밀어 맞춘다. 인트로 글귀가 팩에 아직 안 구워졌거나 설정이 off 면 아무것도 건드리지 않아 옛 오프닝이 그대로 나온다.
  * 소리(gave:trip.intro_&lt;대본&gt;_full|short, tools/trip/intro.py 가 구움)가 팩에 없으면 소리 없이 글만 나오고 배경 음악도 그대로 흐른다.
  *
- * <p>설정: trip.intro = first(서버를 켠 뒤 첫 판만 긴 판, 다음부터 짧은 판) | full(매 판 긴 판) | short(매 판 짧은 판) | off(옛 오프닝).
+ * <p>설정: trip.intro = full(매 판 긴 판, 기본: 2026-11-16 사용자 "두번째로 시작하면 짧은인트로만 나옴. 고치고") | first(서버를 켠 뒤 첫 판만 긴 판,
+ * 다음부터 짧은 판) | short(매 판 짧은 판) | off(옛 오프닝).
  * 대본은 장면표의 하나(2026-11-14 사용자가 a '게이브 씨' 를 고름). 시험 훅 '인트로 x 틀기 [짧게]'(대기실에서 모두에게 틀어 봄), '인트로 x 끝', '인트로 x 상태'.
  */
 public final class Story implements TripPart {
@@ -83,12 +84,12 @@ public final class Story implements TripPart {
         this.game = game;
         this.trip = trip;
         var c = game.plugin.getConfig();
-        mode = c.getString("trip.intro", "first").toLowerCase(Locale.ROOT);
+        mode = c.getString("trip.intro", "full").toLowerCase(Locale.ROOT);
         // YAML 은 따옴표 없는 off 를 false 로 읽는다
         if (mode.equals("false")) mode = "off";
         if (!List.of("first", "full", "short", "off").contains(mode)) {
-            game.plugin.getLogger().warning("[이야기] 설정 trip.intro 에 모르는 값 " + mode + ": first 로 읽음(first, full, short, off)");
-            mode = "first";
+            game.plugin.getLogger().warning("[이야기] 설정 trip.intro 에 모르는 값 " + mode + ": full 로 읽음(full, first, short, off)");
+            mode = "full";
         }
         load();
     }

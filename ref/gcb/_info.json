@@ -1,7 +1,7 @@
 {
  "title": "GCB 서버 리소스팩(Minecraft 26.3)의 총 모델 셋",
  "from": "의뢰인이 운영하는 다른 마인크래프트 서버(GCB)의 리소스팩. 공개 받는 주소 없음: 의뢰인에게서 ref/gcb/extracted 를 받거나 그 팩 폴더로 tools/props/gcb_import.py 를 돌린다",
- "date": "2026-11-14",
+ "date": "2026-11-16",
  "license": "없음(권리 미확인)",
  "license_note": "라이선스 표기가 없는 자료다. 모델 셋 모두 Blockbench 로 만든 직육면체 모델이고 모양은 상용 게임의 총을 본떴다(mastif, rampage: Apex Legends 의 Mastiff, Rampage. bolter: Warhammer 40,000 의 볼트 피스톨). 누가 만들었는지는 그 팩의 기록에 없다. 공개 팩에 넣을지는 의뢰인이 정한다",
  "items": {
@@ -9,13 +9,38 @@
   "gcb_rampage": "assets/gcb/models/item/weapon/apexweapons/rampage/base.json (요소 271, 텍스처 128x128)",
   "gcb_boltpistol": "assets/modelengine/models/spacemarine/bolter.json (요소 56, 텍스처 128x128. ModelEngine 이 캐릭터 모델의 왼손 권총 뼈를 구운 것, 총구가 아래를 봄)"
  },
- "sounds": "꺼내지 않음. 총소리는 tools/props/gcb_sounds.py 가 새로 합성",
+ "sounds": "마스티프, 렘페이지 총소리는 꺼내지 않음(tools/props/gcb_sounds.py 가 새로 합성). 볼트 피스톨 소리(char/spacemarine/boltpistol/fire/3p, 1p 6개씩, reload/out, in, bolter/hit/entity 6개, hit/block/rock 5개)는 파일 그대로. 녹음 소리이고 출처는 그 팩의 기록에 없다(Warhammer 40,000 게임에서 온 것으로 보임)",
  "files": {
   "assets/gcb/models/item/weapon/apexweapons/mastif/base.json": "58e7ebe5d21d7012bb8587a747d13f9cbd62838e48d0c0e8067ae743e2331fa8",
   "assets/gcb/textures/item/weapon/apexweapons/mastif/mastif.png": "67140e37e57928efa24da36b19f2b5c989b9abe3297c070a10635bab01a1ceb2",
   "assets/gcb/models/item/weapon/apexweapons/rampage/base.json": "3a29c08c7f6f54990e8e87c094073104e3944bec69187d62aadf94324ce2054c",
   "assets/gcb/textures/item/weapon/apexweapons/rampage/rampage.png": "d9d3bd696c479f4f84eb0317a7e78e8deff43201a5e79ac415a3b5fad9fef947",
   "assets/modelengine/models/spacemarine/bolter.json": "a2ff80f83b6a56bd04f8ebc25099a08ad47a63be3453c7271583d3d4f42844ae",
-  "assets/modelengine/textures/entity/models/spacemarine_boltpistol.png": "6848aa38c194a9f2a705e0dcf41a5aa8f4333b37742c69716c4814c767946dba"
+  "assets/modelengine/textures/entity/models/spacemarine_boltpistol.png": "6848aa38c194a9f2a705e0dcf41a5aa8f4333b37742c69716c4814c767946dba",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/1.ogg": "200608dd6a69966f56cb05491a0139505c58d6444a9ff89b71cbc27d4b9713d7",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/2.ogg": "927164bc00cafc97d7e3c5f8868ca707af79ce453f34e6121a9e058e00dbebcd",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/3.ogg": "2f3694b39765065caca8a943d46e45c16b5798464b48f6afeef4485bd65025ff",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/4.ogg": "d694e0348cb058325c6ce91fbcd7b72356691c20d7c7b3634b11a8c196e76471",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/5.ogg": "1ef5a594bfdb7d303211fbd38f97ae8aa9caea29a111c704bad3feb57abcbd89",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/6.ogg": "145c40a8754bd30ad9b7a6e76bbfc9b085a35ac10378da408d72e1839d1d94ec",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/1.ogg": "3d15208df2d4870eb53665ce61f001643b6f85972c89c08f48d5c44da0820682",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/2.ogg": "ae8d6e0596733ca16a784f29b336d6a8df03353945702f6d1ef8562993d59272",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/3.ogg": "89337f7e2393d2c2053e5b9381f23d06a1e2b89d84eac6bc0a1cd0b18cfbfca4",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/4.ogg": "50a8a09b8ace9596a3d9dd4c9f1b006c2425326be4df1bafaf6121e8d649a189",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/5.ogg": "051b02811b8001d37b2b1ef086e5e3f1e939bb1df00eaa63ff4849fdee1062ab",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/6.ogg": "336839051a8acfaf0d4a84b7850b9dee18ffd7737c357af31915f89f1fdb3ea6",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/reload/out/1.ogg": "0b09604a96a07c8b28fc800b61b59e4b14e4407806656149f8cc1f13187e37d4",
+  "assets/minecraft/sounds/char/spacemarine/boltpistol/reload/in/1.ogg": "37f3f85fa475f099d5820005d15fe5e7d317b9a1ca0238ae9d59bac78708b106",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/1.ogg": "b95c78558230df2ef8ff160068537e4b7ba3ac653a35c4ecf25185ad1d5d6167",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/2.ogg": "9149d758b2cb3230516d2f6fa0624a21c55da9503f58f1bc2c6641fbe1abdf52",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/3.ogg": "0deb067fd496c1e7ab6392c7c587e96f1c3982effb0bf744aaa3731ec0dea9f4",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/4.ogg": "115a67950335838d8684ccf700fe6d05ad4bed56ef07df84441b67d0a1a7fa64",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/5.ogg": "796130940ca9f0fba8a67495f68dc20cd6c9a87d49be8c01d608efdb6393644b",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/6.ogg": "3e5ff1f1d98e03405c19c758d9c5a8b3021950ccc1aaa7fc896bf8e4c9662c54",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/1.ogg": "8165572e84fc669cf4b9f2881b3a1911676225862f4fd11bee040c70e1e08c99",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/2.ogg": "457568e42a36fa9b856fb84aa9fc52cd6ed9961f6119a4f3641568d3012c9a36",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/3.ogg": "212ee85f97204ac2c3f80b787ea72e1ccd39675a4464a39d414a45eb8b66b801",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/4.ogg": "15a35606af57e8d40d77783f941ef5dc02cb242c5e458847a3f10f69cc3fefaf",
+  "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/5.ogg": "0b4e02d89f68b9785078994cc5792d92ae636657ab603fef5b4af8a1a386fd57"
  }
 }

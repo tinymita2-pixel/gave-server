@@ -414,7 +414,8 @@ final class AugRules {
         int delta = s.money - r.money;
         if (r.money != Integer.MIN_VALUE && delta < 0 && game.shop.view(p) != null) spentNow(r, -delta);
         // ---- 처치 돈 배율(현상금, 얇은 피), 팁 몫, 물주 몫, 빚의 벌이 배율을 지갑에 알림(1초에 한 번)
-        if (now % kr.gave.player.Wallet.EVERY == 0) game.players.wallet.rate(s.id, killMul(p), has(p, Aug.M_TIP) ? Aug.M_TIP.n("frac", 0.1) : 0,
+        if (now % kr.gave.player.Wallet.EVERY == 0) game.players.wallet.rate(s.id, killMul(p) * (has(p, Aug.M_TIP) ? 1 + Aug.M_TIP.n("frac", 0.1) : 1),
+            has(p, Aug.M_TIP) ? Aug.M_TIP.n("frac", 0.1) : 0,
             has(p, Aug.E_PATRON) ? Aug.E_PATRON.n("frac", 0.1) : 0, r.debtRounds > 0 ? Aug.X_DEBT.n("earn", 0.5) : 1);
         r.money = s.money;
         // ---- 뽑은 총을 정함(바꾸든 버리든 한 자루가 버려짐): 장물
@@ -443,15 +444,9 @@ final class AugRules {
             }
             int ears = (int) Aug.B_EARS.n("every", 40);
             if (beat % ears == 0 && has(p, Aug.B_EARS)) {
-                for (Gabe g : game.mobs.near(l.toVector(), Aug.B_EARS.n("r", 14), x -> x.disguised)) game.hud.point(p, g.pos.clone(), ears);
+                for (Gabe g : game.mobs.near(l.toVector(), Aug.B_EARS.n("r", 24), x -> x.disguised || elite(x))) game.hud.point(p, g.pos.clone(), ears);
             }
             autoAmmo(p, s, r, a, now);
-        } else if (s.life == Life.DEAD || s.life == Life.TRAPPED) {
-            int every = (int) Aug.D_GHOST.n("every", 60);
-            if (beat % every == 0 && has(p, Aug.D_GHOST)) {
-                Gabe g = game.mobs.looked(p, Aug.D_GHOST.n("reach", 40));
-                if (g != null && !g.dead) game.hud.point(null, g.pos.clone(), (int) Aug.D_GHOST.n("ticks", 60));
-            }
         }
         // ---- 총 배율이 달라지는 조건
         int dyn = 0;
@@ -470,7 +465,16 @@ final class AugRules {
         if (to == Life.TRAPPED && from == Life.ALIVE) r.downRound = true;
         if (to == Life.DOWNED && from == Life.ALIVE) {
             r.downRound = true;
-            if (s.lastBy != null && has(p, Aug.D_GRUDGE)) r.grudge.add(s.lastBy);
+            // 원한: 나나 동료를 쓰러뜨린 종을 원한을 가진 모두가 기억한다
+            if (s.lastBy != null) for (Player q : game.players.inPlay()) {
+                Run rq = runs.get(q.getUniqueId());
+                if (rq != null && has(q, Aug.D_GRUDGE)) rq.grudge.add(s.lastBy);
+            }
+            // 미련: 쓰러지는 순간 곁의 것들이 잠깐 멈춘다(일으킬 틈)
+            if (has(p, Aug.D_GHOST)) {
+                int ticks = (int) Aug.D_GHOST.n("ticks", 80);
+                for (Gabe g : game.mobs.near(p.getLocation().toVector(), Aug.D_GHOST.n("r", 6), x -> true)) stun(g, ticks);
+            }
             if (has(p, Aug.B_SECOND) && !r.secondUsed) {
                 // Players.hurt 에 cheatDeath 고리가 없을 때의 대체: 쓰러진 다음 틱 맨 앞에 바로 일으킨다
                 r.secondUsed = true;
@@ -729,7 +733,7 @@ final class AugRules {
             if (has(p, Aug.E_INTEREST)) grant(p, (int) Math.min(Math.floor(s.money * Aug.E_INTEREST.n("frac", 0.06)), Math.round(Aug.E_INTEREST.n("cap", 0.5) * u)));
             if (r.spentShop > 0 && has(p, Aug.T_CASHBACK)) grant(p, (int) Math.floor(r.spentShop * Aug.T_CASHBACK.n("frac", 0.08)));
             if (!r.downRound && s.standing() && has(p, Aug.E_BET)) grant(p, (int) Math.round(Aug.E_BET.n("u", 0.5) * u));
-            if (has(p, Aug.E_HOARD)) r.hoard = r.spentRound ? 0 : (int) Math.min(Aug.E_HOARD.n("max", 10), r.hoard + 1);
+            if (has(p, Aug.E_HOARD)) r.hoard = r.spentRound ? r.hoard / 2 : (int) Math.min(Aug.E_HOARD.n("max", 10), r.hoard + 1);
             if (has(p, Aug.X_GAMBLE)) gamble(p);
         }
         if (r.debtRounds > 0) r.debtRounds--;
@@ -772,7 +776,7 @@ final class AugRules {
 
     double hpAdd(Player p) {
         Run r = runs.get(p.getUniqueId());
-        return r == null ? 0 : Aug.D_FACE.n("hp", 20) * r.faceKills;
+        return r == null ? 0 : Aug.D_FACE.n("hp", 5) * r.faceKills;
     }
 
     double hpMul(Player p) {
@@ -952,7 +956,8 @@ final class AugRules {
         if (r.chain > 0 && now < r.chainUntil && has(p, Aug.K_CHAIN)) k *= 1 + Aug.K_CHAIN.n("step", 0.04) * r.chain;
         if (g.hp >= g.maxHp - 1e-6 && has(p, Aug.K_FIRST)) k *= Aug.K_FIRST.n("dmg", 1.4);
         if (now < r.returnUntil) k *= Aug.D_RETURN.n("dmg", 1.4);
-        if (!r.grudge.isEmpty() && r.grudge.contains(g.sp) && has(p, Aug.D_GRUDGE)) k *= Aug.D_GRUDGE.n("dmg", 1.3);
+        if (!r.grudge.isEmpty() && r.grudge.contains(g.sp) && has(p, Aug.D_GRUDGE)) k *= Aug.D_GRUDGE.n("dmg", 1.5);
+        if (r.truckDist <= Aug.P_LAMP.n("r", 18) && A.part(Aug.P_LAMP) > 0) k *= Aug.P_LAMP.n("dmg", 1.1);
         return k;
     }
 
@@ -1066,8 +1071,8 @@ final class AugRules {
             if (rnd.nextBoolean() && game.guns.refillAll(p)) Props.sound(p, null, Sound.ITEM_ARMOR_EQUIP_IRON, 0.8f, 1f, 1.2f);
             else game.players.addMoney(p, (int) Math.round(a.n("u", 0.3) * A.unit()));
         }
-        UUID face = faces.remove(g);
-        if (face != null && face.equals(p.getUniqueId()) && has(p, Aug.D_FACE) && r.faceKills < Aug.D_FACE.n("max", 3)) {
+        faces.remove(g);
+        if (elite(g) && has(p, Aug.D_FACE) && r.faceKills < Aug.D_FACE.n("max", 6)) {
             r.faceKills++;
             lastLog = "내 얼굴 " + p.getName() + " " + r.faceKills;
         }

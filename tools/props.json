@@ -5835,7 +5835,22 @@
    "files": [
     "gun/gcb/boltpistol_fire1.ogg",
     "gun/gcb/boltpistol_fire2.ogg",
-    "gun/gcb/boltpistol_fire3.ogg"
+    "gun/gcb/boltpistol_fire3.ogg",
+    "gun/gcb/boltpistol_fire4.ogg",
+    "gun/gcb/boltpistol_fire5.ogg",
+    "gun/gcb/boltpistol_fire6.ogg"
+   ],
+   "subtitle_ko": "볼트 피스톨 사격",
+   "attenuation_distance": 80
+  },
+  "gave:gun.gcb_boltpistol.fire_1p": {
+   "files": [
+    "gun/gcb/boltpistol_fire_1p1.ogg",
+    "gun/gcb/boltpistol_fire_1p2.ogg",
+    "gun/gcb/boltpistol_fire_1p3.ogg",
+    "gun/gcb/boltpistol_fire_1p4.ogg",
+    "gun/gcb/boltpistol_fire_1p5.ogg",
+    "gun/gcb/boltpistol_fire_1p6.ogg"
    ],
    "subtitle_ko": "볼트 피스톨 사격",
    "attenuation_distance": 80
@@ -5851,6 +5866,29 @@
     "gun/gcb/boltpistol_mag_in.ogg"
    ],
    "subtitle_ko": "탄창 꽂음"
+  },
+  "gave:gun.gcb_boltpistol.boom": {
+   "files": [
+    "gun/gcb/boltpistol_boom1.ogg",
+    "gun/gcb/boltpistol_boom2.ogg",
+    "gun/gcb/boltpistol_boom3.ogg",
+    "gun/gcb/boltpistol_boom4.ogg",
+    "gun/gcb/boltpistol_boom5.ogg",
+    "gun/gcb/boltpistol_boom6.ogg"
+   ],
+   "subtitle_ko": "볼트 탄 폭발",
+   "attenuation_distance": 256
+  },
+  "gave:gun.gcb_boltpistol.boom_block": {
+   "files": [
+    "gun/gcb/boltpistol_boom_block1.ogg",
+    "gun/gcb/boltpistol_boom_block2.ogg",
+    "gun/gcb/boltpistol_boom_block3.ogg",
+    "gun/gcb/boltpistol_boom_block4.ogg",
+    "gun/gcb/boltpistol_boom_block5.ogg"
+   ],
+   "subtitle_ko": "볼트 탄 폭발(블록)",
+   "attenuation_distance": 256
   }
  },
  "arms": {
@@ -13446,33 +13484,153 @@
   },
   {
    "file": "gun/gcb/boltpistol_fire1.ogg",
-   "from": "tools/props/gcb_sounds.py",
-   "source": "게이브(직접 합성)",
-   "process": "숫자 표로 합성한 소리(씨앗 고정), 모노 44100 Hz, libvorbis q7"
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/1.ogg 바이트 그대로"
   },
   {
    "file": "gun/gcb/boltpistol_fire2.ogg",
-   "from": "tools/props/gcb_sounds.py",
-   "source": "게이브(직접 합성)",
-   "process": "숫자 표로 합성한 소리(씨앗 고정), 모노 44100 Hz, libvorbis q7"
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/2.ogg 바이트 그대로"
   },
   {
    "file": "gun/gcb/boltpistol_fire3.ogg",
-   "from": "tools/props/gcb_sounds.py",
-   "source": "게이브(직접 합성)",
-   "process": "숫자 표로 합성한 소리(씨앗 고정), 모노 44100 Hz, libvorbis q7"
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/3.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire4.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/4.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire5.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/5.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire6.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/3p/6.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire_1p1.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/1.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire_1p2.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/2.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire_1p3.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/3.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire_1p4.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/4.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire_1p5.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/5.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_fire_1p6.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/fire/1p/6.ogg 바이트 그대로"
   },
   {
    "file": "gun/gcb/boltpistol_mag_out.ogg",
-   "from": "tools/props/gcb_sounds.py",
-   "source": "게이브(직접 합성)",
-   "process": "숫자 표로 합성한 소리(씨앗 고정), 모노 44100 Hz, libvorbis q7"
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/reload/out/1.ogg 바이트 그대로"
   },
   {
    "file": "gun/gcb/boltpistol_mag_in.ogg",
-   "from": "tools/props/gcb_sounds.py",
-   "source": "게이브(직접 합성)",
-   "process": "숫자 표로 합성한 소리(씨앗 고정), 모노 44100 Hz, libvorbis q7"
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/boltpistol/reload/in/1.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom1.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/1.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom2.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/2.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom3.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/3.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom4.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/4.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom5.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/5.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom6.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/entity/6.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom_block1.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/1.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom_block2.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/2.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom_block3.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/3.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom_block4.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/4.ogg 바이트 그대로"
+  },
+  {
+   "file": "gun/gcb/boltpistol_boom_block5.ogg",
+   "from": "tools/props/gcb_import.py",
+   "source": "GCB 서버 리소스팩(권리 미확인)",
+   "process": "assets/minecraft/sounds/char/spacemarine/bolter/hit/block/rock/5.ogg 바이트 그대로"
   }
  ],
  "sound_notes": "모든 사건은 sounds.json 에 자막(ko_kr, en_us) 과 함께. 원본이 스테레오면 모노로 다시 부호화(libvorbis q7), 모노면 바이트 그대로 복사. 연사 총 소리는 꼬리를 잘라 겹침을 줄임(sound_files.process). 높이 계약(Props.java 머리 주석): 팩에 사건이 있으면 Java 는 흔들림(1 둘레 무작위, 없으면 1)만 pitch 로 보내고, 귀에 들리는 높이는 sounds.json pitch(사건의 pitch, 없으면 1)가 정한다(클라가 둘을 곱해 0.5~2.0 으로 자름). 모드 소리 높이를 바꾸려면 build_more.py PITCH 만 고친다. call 은 Java 가 부르는 자리와 값이고 fallback_pitch 는 팩에 사건이 없을 때 울리는 바닐라 대체 소리에만 쓴다. attenuation_distance 는 Java 가 보내는 반경과 맞춘다(soundAround 는 그 range, Props.sound 는 서버가 16 x 음량 안에 뿌려 16, 몸 소리 soundOn 은 16, 가까운 폭발은 48 밖을 먼 폭발이 넘겨받아 96). 반경보다 길면 반경 끝에서 뚝 끊긴다. Java 가 부르지 않는 사건, 고르지 않는 변형은 층에 넣지 않는다(build_more.py SOUNDS 위 주석). vanilla_reference 인 사건은 팩에 파일 없이 바닐라 소리를 가리킴(files 의 minecraft: 경로)"

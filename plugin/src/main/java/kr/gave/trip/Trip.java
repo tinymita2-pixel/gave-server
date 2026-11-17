@@ -266,7 +266,16 @@ public final class Trip {
 
     /** 차례로 물어 처음 null 아닌 답(없으면 null). 키는 {@link TripPart#ask}. */
     public Object ask(String key) {
-        if (!enabled) return null;
+        if (!enabled) {
+            TripPart st = parts.get("Story");
+            if (st == null) return null;
+            try {
+                return st.ask(key);
+            } catch (RuntimeException | LinkageError ex) {
+                fail("Story", "ask " + key, ex);
+                return null;
+            }
+        }
         for (Map.Entry<String, TripPart> e : parts.entrySet()) {
             try {
                 Object o = e.getValue().ask(key);
@@ -348,7 +357,10 @@ public final class Trip {
     /** 그 사람 화면에 쓸 HUD 값(모든 부품의 {@link TripPart#hud} 를 모음). 공통 값: trip.act, trip.stage, trip.left, trip.kind. 꺼져 있으면 빈 표. */
     public Map<String, Object> hud(Player p) {
         Map<String, Object> out = new HashMap<>();
-        if (!enabled) return out;
+        if (!enabled) {
+            each("hud", part -> part.hud(p, out)); // 원정을 꺼도 도는 인트로의 화면 값만
+            return out;
+        }
         out.put("trip.act", act());
         out.put("trip.stage", stage());
         out.put("trip.left", stagesLeft());
@@ -446,6 +458,12 @@ public final class Trip {
         each("gameOver", TripPart::gameOver);
     }
 
+    /** 다시 하기(Game.retry): 부품마다 판 끝에 한 것을 되돌리고(트럭 되살림, 어두워진 하늘) 판 끝 까닭을 지운다. */
+    public void retry() {
+        each("retry", TripPart::retry);
+        endCause = null;
+    }
+
     public void reset() {
         each("reset", TripPart::reset);
         endCause = null;
@@ -485,7 +503,13 @@ public final class Trip {
     }
 
     private void each(String what, Consumer<TripPart> f) {
-        if (!enabled) return;
+        if (!enabled) {
+            // 원정을 꺼도 판 시작 인트로는 돈다(2026-11-15 사용자 "원정 아니어도 인트로는 나와야지"): Story 는 모든 고리, 검은 덮개를 쥔 Travel 은
+            // 틱과 HUD 만(이동은 원정이 꺼져 있으면 안 열려 덮개만 돈다). 차례는 켜졌을 때와 같다(Travel 다음 Story)
+            if (parts.containsKey("Travel") && (what.equals("tick") || what.equals("hud"))) call("Travel", what, f);
+            if (parts.containsKey("Story")) call("Story", what, f);
+            return;
+        }
         for (Map.Entry<String, TripPart> e : parts.entrySet()) call(e.getKey(), what, f);
     }
 

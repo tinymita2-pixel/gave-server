@@ -189,13 +189,13 @@ public final class Records {
     }
 
     /** 판 끝(Game.gameOver): 기록 한 줄, 구간 최고 갱신, 채팅 한 줄, [판] 로그. */
-    /** 이 판에 운영자가 /gave 웨이브 로 건너뛰었나(그런 판은 최고 기록에 넣지 않음, 기록 줄에는 skipped 로 남김). */
+    /** 이 판에 운영자가 /gave 웨이브 로 건너뛰었거나 진 뒤 다시 했나(Game.retry: 처음 시도는 기록하고 그 뒤는 최고 기록에 넣지 않음, 기록 줄에는 skipped 로 남김). */
     public boolean skipped;
 
     public void finish(int wave) {
         if (skipped) {
             lastWave = wave;
-            game.plugin.getLogger().info("[판] 끝 웨이브 " + wave + " (웨이브 건너뛴 판: 기록 안 함)");
+            game.plugin.getLogger().info("[판] 끝 웨이브 " + wave + " (웨이브 건너뛰거나 다시 한 판: 기록 안 함)");
             return;
         }
         int people = Math.max(1, Math.max(peak, game.players.inPlay().size()));

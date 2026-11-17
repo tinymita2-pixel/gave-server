@@ -70,6 +70,10 @@ public interface TripPart {
     default void gameOver() {
     }
 
+    /** 다시 하기(Game.retry: 진 판의 판 끝 동안 채팅을 누름, 그 라운드 앞 준비 시간으로 되감음). 판 끝에 한 것을 되돌린다. 판 끝 까닭은 이 뒤에 지워진다. */
+    default void retry() {
+    }
+
     /** 판 정리(대기실로). 놓은 개체, 바꾼 땅과 하늘을 되돌린다. */
     default void reset() {
     }

@@ -368,6 +368,12 @@ public final class Theme implements TripPart {
         if (Trip.END_TRUCK.equals(trip.endCause())) dim(1, 0);
     }
 
+    /** 다시 하기: 판 끝에 더한 어둠을 걷는다. */
+    @Override
+    public void retry() {
+        dim(0, 0);
+    }
+
     @Override
     public void reset() {
         go(ACT_OLD, 0, 0);
